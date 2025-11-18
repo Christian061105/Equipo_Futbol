@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${competicion.id != null} ? 'Editar Competición' : 'Nueva Competición'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d1b2a, #1b263b, #415a77);
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+        }
+        .navbar {
+            background-color: #0d1b2a !important;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: #fff !important;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.4);
+        }
+        .form-label {
+            color: #cfd8dc;
+        }
+        input.form-control {
+            background-color: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+        }
+        input.form-control:focus {
+            background-color: rgba(255,255,255,0.25);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        .btn-success {
+            background-color: #00b894;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #019875;
+        }
+        .btn-secondary {
+            background-color: #636e72;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5154;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">🏆 Gestor de Competiciones</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/competiciones}">Listado</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Formulario</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="container py-5">
+        <div class="card p-4 mx-auto" style="max-width: 800px;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 th:text="${competicion.id != null} ? '✏️ Editar Competición' : '➕ Nueva Competición'"></h2>
+                <a th:href="@{/competiciones}" class="btn btn-secondary">Volver</a>
+            </div>
+
+            <form th:action="${competicion.id != null} ? @{/competiciones/guardar} : @{/competiciones/guardar}" 
+                  th:object="${competicion}" method="post">
+                
+                <input type="hidden" th:field="*{id}">
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="nombre" class="form-label">Nombre de la Competición</label>
+                        <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="montoPremio" class="form-label">Monto del Premio</label>
+                        <input type="number" class="form-control" id="montoPremio" th:field="*{montoPremio}">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                        <input type="date" class="form-control" id="fechaInicio" th:field="*{fechaInicio}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="fechaFin" class="form-label">Fecha de Fin</label>
+                        <input type="date" class="form-control" id="fechaFin" th:field="*{fechaFin}">
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="submit" class="btn btn-success px-4">💾 Guardar</button>
+                    <a th:href="@{/competiciones}" class="btn btn-secondary px-4">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

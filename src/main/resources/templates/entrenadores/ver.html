@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${entrenador.nombre + ' ' + entrenador.apellido}">Entrenador | Futbol App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .navbar {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .container {
+            max-width: 900px;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-weight: 700;
+            color: #212529;
+        }
+        .btn {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">⚽ Futbol App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="navbarNav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/clubes}">Clubes</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/jugadores}">Jugadores</a></li>
+                    <li class="nav-item"><a class="nav-link active fw-semibold" th:href="@{/entrenadores}">Entrenadores</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/competiciones}">Competiciones</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/asociaciones}">Asociaciones</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO -->
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 th:text="'👨‍💼 ' + ${entrenador.nombre} + ' ' + ${entrenador.apellido}"></h1>
+            <a th:href="@{/entrenadores}" class="btn btn-outline-secondary">← Volver</a>
+        </div>
+
+        <div class="card p-4">
+            <div class="card-header bg-dark text-white rounded-top">
+                <h5 class="mb-0">Información del Entrenador</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>ID:</strong> <span th:text="${entrenador.id}"></span></p>
+                        <p><strong>Nombre:</strong> <span th:text="${entrenador.nombre}"></span></p>
+                        <p><strong>Apellido:</strong> <span th:text="${entrenador.apellido}"></span></p>
+                        <p><strong>Edad:</strong> <span th:text="${entrenador.edad}"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Nacionalidad:</strong> <span th:text="${entrenador.nacionalidad}"></span></p>
+                        <p><strong>Club Actual:</strong>
+                            <span th:if="${entrenador.club != null}" th:text="${entrenador.club.nombre}" class="badge bg-success"></span>
+                            <span th:unless="${entrenador.club != null}" class="badge bg-warning text-dark">Sin club</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <a th:href="@{/entrenadores/editar/{id}(id=${entrenador.id})}" class="btn btn-warning text-white">✏️ Editar Entrenador</a>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p class="mb-0">© 2025 Futbol App — Proyecto académico</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

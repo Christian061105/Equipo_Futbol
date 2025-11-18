@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${club.id != null} ? 'Editar Club' : 'Nuevo Club'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            min-height: 100vh;
+        }
+        h1 {
+            font-weight: 700;
+            color: #0d6efd;
+        }
+        .card {
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .btn-success {
+            background-color: #198754;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #157347;
+        }
+    </style>
+</head>
+<body>
+    <!-- 🔹 NAVBAR GLOBAL -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">⚽ Futbol App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link active" th:href="@{/clubes}">Clubes</a>
+                    <a class="nav-link" th:href="@{/jugadores}">Jugadores</a>
+                    <a class="nav-link" th:href="@{/entrenadores}">Entrenadores</a>
+                    <a class="nav-link" th:href="@{/competiciones}">Competiciones</a>
+                    <a class="nav-link" th:href="@{/asociaciones}">Asociaciones</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 🔹 CONTENIDO PRINCIPAL -->
+    <div class="container mt-5 mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 th:text="${club.id != null} ? '✏️ Editar Club' : '➕ Nuevo Club'"></h1>
+            <a th:href="@{/clubes}" class="btn btn-outline-secondary">⬅️ Volver a Clubes</a>
+        </div>
+
+        <div class="card">
+            <div class="card-body p-4">
+                <form th:action="@{/clubes/guardar}" th:object="${club}" method="post">
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label fw-semibold">Nombre del Club *</label>
+                            <input type="text" class="form-control" id="nombre" th:field="*{nombre}" 
+                                   placeholder="Ingrese el nombre del club" required>
+                            <div class="form-text">Nombre oficial del club de fútbol</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ciudad" class="form-label fw-semibold">Ciudad</label>
+                            <input type="text" class="form-control" id="ciudad" th:field="*{ciudad}" 
+                                   placeholder="Ciudad sede del club">
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mt-1">
+                        <div class="col-md-6">
+                            <label for="fundacion" class="form-label fw-semibold">Año de Fundación</label>
+                            <input type="number" class="form-control" id="fundacion" th:field="*{fundacion}" 
+                                   min="1800" max="2025" placeholder="Ej: 1946">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="entrenador" class="form-label fw-semibold">Entrenador</label>
+                            <select class="form-select" id="entrenador" th:field="*{entrenador}">
+                                <option value="">Seleccionar Entrenador</option>
+                                <option th:each="entrenador : ${entrenadores}" 
+                                        th:value="${entrenador.id}"
+                                        th:text="${entrenador.nombre + ' ' + entrenador.apellido + ' (' + entrenador.nacionalidad + ')'}"
+                                        th:selected="${club.entrenador != null && club.entrenador.id == entrenador.id}">
+                                </option>
+                            </select>
+                            <div class="form-text">Seleccione el entrenador del club</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="asociacion" class="form-label fw-semibold">Asociación</label>
+                        <select class="form-select" id="asociacion" th:field="*{asociacion}">
+                            <option value="">Seleccionar Asociación</option>
+                            <option th:each="asociacion : ${asociaciones}" 
+                                    th:value="${asociacion.id}"
+                                    th:text="${asociacion.nombre + ' - ' + asociacion.pais}"
+                                    th:selected="${club.asociacion != null && club.asociacion.id == asociacion.id}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="submit" class="btn btn-success shadow-sm">
+                            <span th:text="${club.id != null} ? '💾 Actualizar Club' : '➕ Crear Club'"></span>
+                        </button>
+                        <a th:href="@{/clubes}" class="btn btn-outline-secondary">❌ Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
