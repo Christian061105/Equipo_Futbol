@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenadores | Futbol App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .navbar {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .container {
+            max-width: 1100px;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-weight: 700;
+            color: #212529;
+        }
+        .btn {
+            border-radius: 10px;
+        }
+        .table thead {
+            background: #343a40;
+            color: white;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">⚽ Futbol App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="navbarNav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/clubes}">Clubes</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/jugadores}">Jugadores</a></li>
+                    <li class="nav-item"><a class="nav-link active fw-semibold" th:href="@{/entrenadores}">Entrenadores</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/competiciones}">Competiciones</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/asociaciones}">Asociaciones</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO -->
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1>👨‍💼 Entrenadores Registrados</h1>
+                <p class="text-muted" th:text="${'Total: ' + entrenadores.size() + ' entrenadores'}"></p>
+            </div>
+            <div>
+                <a th:href="@{/}" class="btn btn-outline-secondary me-2">🏠 Inicio</a>
+                <a th:href="@{/entrenadores/nuevo}" class="btn btn-success">➕ Nuevo Entrenador</a>
+            </div>
+        </div>
+
+        <div class="card p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Edad</th>
+                            <th>Nacionalidad</th>
+                            <th>Club</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="entrenador : ${entrenadores}">
+                            <td th:text="${entrenador.id}"></td>
+                            <td th:text="${entrenador.nombre}"></td>
+                            <td th:text="${entrenador.apellido}"></td>
+                            <td th:text="${entrenador.edad}"></td>
+                            <td>
+                                <span th:text="${entrenador.nacionalidad}" class="badge bg-info text-dark"></span>
+                            </td>
+                            <td>
+                                <span th:if="${entrenador.club}" th:text="${entrenador.club.nombre}" class="badge bg-success"></span>
+                                <span th:unless="${entrenador.club}" class="badge bg-warning text-dark">Sin club</span>
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm">
+                                    <a th:href="@{/entrenadores/ver/{id}(id=${entrenador.id})}" class="btn btn-info text-white">👁️</a>
+                                    <a th:href="@{/entrenadores/editar/{id}(id=${entrenador.id})}" class="btn btn-warning text-white">✏️</a>
+                                    <a th:href="@{/entrenadores/eliminar/{id}(id=${entrenador.id})}" class="btn btn-danger"
+                                       onclick="return confirm('¿Eliminar entrenador ' + '[[${entrenador.nombre}]]' + ' ' + '[[${entrenador.apellido}]]' + '?')">
+                                       🗑️
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:if="${entrenadores.empty}" class="alert alert-info text-center mt-3 mb-0">
+                <h5>No hay entrenadores registrados</h5>
+                <a th:href="@{/entrenadores/nuevo}" class="btn btn-success mt-2">➕ Crear Primer Entrenador</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p class="mb-0">© 2025 Futbol App — Proyecto académico</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

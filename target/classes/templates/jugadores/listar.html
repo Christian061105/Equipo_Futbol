@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Jugadores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d1b2a, #1b263b, #415a77);
+            color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: #0a1128 !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .container {
+            flex: 1;
+        }
+
+        .table {
+            background-color: #1e2a47;
+            color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table thead {
+            background-color: #162447;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #253a5c;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: #5c677d;
+            border: none;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border: none;
+        }
+
+        .btn-warning {
+            color: #000;
+            font-weight: 600;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+
+        h1 {
+            font-weight: 700;
+            color: #f8f9fa;
+        }
+
+        footer {
+            background-color: #0a1128;
+            text-align: center;
+            color: #ccc;
+            padding: 1rem 0;
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">⚽ Futbol App</a>
+            <div class="navbar-nav">
+                <a class="nav-link" th:href="@{/clubes}">Clubes</a>
+                <a class="nav-link active" th:href="@{/jugadores}">Jugadores</a>
+                <a class="nav-link" th:href="@{/entrenadores}">Entrenadores</a>
+                <a class="nav-link" th:href="@{/competiciones}">Competiciones</a>
+                <a class="nav-link" th:href="@{/asociaciones}">Asociaciones</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO -->
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1>⚽ Lista de Jugadores</h1>
+                <p class="text-light opacity-75" th:text="${'Total: ' + jugadores.size() + ' jugadores'}"></p>
+            </div>
+            <div>
+                <a th:href="@{/}" class="btn btn-secondary me-2">🏠 Inicio</a>
+                <a th:href="@{/jugadores/nuevo}" class="btn btn-success">➕ Nuevo Jugador</a>
+            </div>
+        </div>
+
+        <div class="table-responsive shadow-lg rounded">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Número</th>
+                        <th>Posición</th>
+                        <th>Club</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="jugador : ${jugadores}">
+                        <td th:text="${jugador.id}"></td>
+                        <td th:text="${jugador.nombre}"></td>
+                        <td th:text="${jugador.apellido}"></td>
+                        <td>
+                            <span th:if="${jugador.numero > 0}" th:text="${jugador.numero}" class="badge bg-dark"></span>
+                            <span th:unless="${jugador.numero > 0}" class="badge bg-secondary">Sin número</span>
+                        </td>
+                        <td>
+                            <span th:if="${jugador.posicion}" th:text="${jugador.posicion}" class="badge bg-primary"></span>
+                            <span th:unless="${jugador.posicion}" class="badge bg-secondary">Sin posición</span>
+                        </td>
+                        <td>
+                            <span th:if="${jugador.club}" th:text="${jugador.club.nombre}" class="badge bg-success"></span>
+                            <span th:unless="${jugador.club}" class="badge bg-warning text-dark">Sin club</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm">
+                                <a th:href="@{/jugadores/ver/{id}(id=${jugador.id})}" class="btn btn-info">👁️</a>
+                                <a th:href="@{/jugadores/editar/{id}(id=${jugador.id})}" class="btn btn-warning">✏️</a>
+                                <a th:href="@{/jugadores/eliminar/{id}(id=${jugador.id})}" class="btn btn-danger"
+                                   onclick="return confirm('¿Eliminar jugador ' + '[[${jugador.nombre}]]' + ' ' + '[[${jugador.apellido}]]' + '?')">
+                                   🗑️
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div th:if="${jugadores.empty}" class="alert alert-info text-center mt-4">
+            <h4>No hay jugadores registrados</h4>
+            <a th:href="@{/jugadores/nuevo}" class="btn btn-success mt-2">➕ Crear Primer Jugador</a>
+        </div>
+    </div>
+
+    <footer>
+        <small>© 2025 Futbol App | Proyecto académico</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
